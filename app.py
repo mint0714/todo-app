@@ -1,7 +1,6 @@
 from flask import Flask      # FlaskというWebサーバの機能セットを読み込む
 
 app = Flask(__name__)        # このファイル自体をFlaskアプリとして登録する
-print(app)
 
 @app.route('/')              # 「/」へのアクセスを待ち受ける
 def index():                 # アクセスがあったときに実行する関数
