@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+<!-- ↑ base.htmlを継承することを宣言する -->
+
+{% block title %}タスク一覧 - ToDoアプリ{% endblock %}
+
+{% block content %}
+<h1>ToDoリスト</h1>
+
+<!-- カテゴリ絞り込み -->
+<div class='filter-bar'>
+    <a href='/'>すべて</a>
+    {% for cat in categories %}
+    <a href='/?category_id={{ cat.id }}'>{{ cat.name }}</a>
+    {% endfor %}
+</div>
+
+<!-- タスク追加フォーム -->
+<form action='/add' method='POST'>
+    <input type='text' name='title' placeholder='タスクを入力' required>
+    <select name='category_id'>
+        <option value=''>カテゴリなし</option>
+        {% for cat in categories %}
+        <option value='{{ cat.id }}'>{{ cat.name }}</option>
+        {% endfor %}
+    </select>
+    <button type='submit'>追加</button>
+</form>
+
+<!-- タスク一覧 -->
+{% for task in tasks %}
+<div class='task-item {% if task.is_completed %}completed{% endif %}'>
+    <span>{{ task.title }}</span>
+    {% if task.category %}
+    <span class='badge'>{{ task.category.name }}</span>
+    <!-- ↑ task.category で関連するCategoryオブジェクトを参照できる（relationship の効果） -->
+    {% endif %}
+    <a href='/task/{{ task.id }}'>詳細</a>
+    <form action='/complete/{{ task.id }}' method='POST' style='display:inline'>
+        <button>{% if task.is_completed %}未完了{% else %}完了{% endif %}</button>
+    </form>
+    <form action='/delete/{{ task.id }}' method='POST' style='display:inline'>
+        <button>削除</button>
+    </form>
+</div>
+{% else %}
+<p>タスクがありません。上のフォームから追加してください。</p>
+{% endfor %}
+{% endblock %}
