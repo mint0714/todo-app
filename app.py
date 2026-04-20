@@ -6,24 +6,6 @@ from datetime import datetime
 app = Flask(__name__)       #Flaskクラスの中にはWebアプリを動かすために必要な機能が全て定義されています。しかしクラスは設計図なので、そのままでは使えません。
                             #Flaskのインスタンスを作成し、URLのルーティング処理や、サーバの起動、DBの設定などを可能にします.(app.py)
 
-@app.route('/')
-def index():
-    category_id = request.args.get('category_id', type=int)
-    # URLの「?category_id=1」のような絞り込みパラメータを取得する
-
-    if category_id:
-        tasks = Task.query.filter_by(category_id=category_id)\
-                          .order_by(Task.created_at.desc()).all()
-    else:
-        tasks = Task.query.order_by(Task.created_at.desc()).all()
-
-    categories = Category.query.all()  # カテゴリ一覧も取得（絞り込みボタンとフォームで使う）
-    return render_template('index.html', tasks=tasks, categories=categories)
-    # ブラウザに文字を返す
-
-if __name__ == '__main__':   #「もしこのファイルが直接実行されたならサーバを起動する」という条件。お決まりの文句みたいなもの
-    app.run(debug=True)      # デバッグモードでサーバを起動。
-
 
 
 # ── データベースの設定 ──────────────────────────────────
@@ -61,6 +43,30 @@ class Comment(db.Model):
 # ── DBにテーブルを作成する ──────────────────────────────
 with app.app_context():  #後処理を手動で書く必要がなくなる
     db.create_all()  # 上記クラスの定義を元にDBファイルを作成する。これは現在存在しないテーブルだけを作成します。
+
+
+
+@app.route('/')
+def index():
+    category_id = request.args.get('category_id', type=int)
+    # URLの「?category_id=1」のような絞り込みパラメータを取得する
+
+    if category_id:
+        tasks = Task.query.filter_by(category_id=category_id)\
+                          .order_by(Task.created_at.desc()).all()
+    else:
+        tasks = Task.query.order_by(Task.created_at.desc()).all()
+
+    categories = Category.query.all()  # カテゴリ一覧も取得（絞り込みボタンとフォームで使う）
+    return render_template('index.html', tasks=tasks, categories=categories)
+    # ブラウザに文字を返す
+
+if __name__ == '__main__':   #「もしこのファイルが直接実行されたならサーバを起動する」という条件。お決まりの文句みたいなもの
+    app.run(debug=True)      # デバッグモードでサーバを起動。
+
+
+
+
 
 
 
