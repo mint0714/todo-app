@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}カテゴリ管理 - ToDoアプリ{% endblock %}
+
+{% block content %}
+<h1>カテゴリ管理</h1>
+
+<form action='/categories/add' method='POST'>
+    <input type='text' name='name' placeholder='カテゴリ名を入力' required>
+    <button type='submit'>追加</button>
+</form>
+
+{% for category in categories %}
+<div class='task-item'>
+    <span>{{ category.name }}</span>
+    <span class='badge'>{{ category.tasks|length }}件のタスク</span>
+    <!-- ↑ category.tasks で紐づくタスクを全件取得し件数を表示（relationshipの効果） -->
+    <form action='/categories/{{ category.id }}/delete' method='POST' style='display:inline'>
+        <button>削除</button>
+    </form>
+</div>
+{% else %}
+<p>カテゴリがありません。</p>
+{% endfor %}
+{% endblock %}
