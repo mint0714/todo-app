@@ -89,6 +89,35 @@ def delete_task(task_id):
     db.session.commit()
     return redirect(url_for('index'))
 
+# ── カテゴリ一覧 ──────────────────────────────────────
+@app.route('/categories')
+def categories():
+    categories = Category.query.all()
+    return render_template('categories.html', categories=categories)
+
+# ── カテゴリの追加 ────────────────────────────────────
+@app.route('/categories/add', methods=['POST'])
+def add_category():
+    name = request.form['name']
+    # 同じ名前のカテゴリが既にないか確認する
+    if not Category.query.filter_by(name=name).first():
+        new_category = Category(name=name)
+        db.session.add(new_category)
+        db.session.commit()
+    return redirect(url_for('categories'))
+
+# ── カテゴリの削除 ────────────────────────────────────
+@app.route('/categories/<int:category_id>/delete', methods=['POST'])
+def delete_category(category_id):
+    category = Category.query.get_or_404(category_id)
+    # このカテゴリに紐づくタスクのcategory_idをNullにする
+    Task.query.filter_by(category_id=category_id)\
+              .update({'category_id': None})
+    db.session.delete(category)
+    db.session.commit()
+    return redirect(url_for('categories'))
+
+
 
 if __name__ == '__main__':   #「もしこのファイルが直接実行されたならサーバを起動する」という条件。お決まりの文句みたいなもの
     app.run(debug=True)      # デバッグモードでサーバを起動。
