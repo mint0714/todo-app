@@ -3,7 +3,9 @@
 
 {% block title %}タスク一覧 - ToDoアプリ{% endblock %}
 
-{% block content %}
+{% block content %}     
+
+<!--ここからbody部分-->
 <h1>ToDoリスト</h1>
 
 <!-- カテゴリ絞り込み -->
@@ -30,17 +32,22 @@
 {% for task in tasks %}
 <div class='task-item {% if task.is_completed %}completed{% endif %}'>
     <span>{{ task.title }}</span>
+
     {% if task.category %}
     <span class='badge'>{{ task.category.name }}</span>
     <!-- ↑ task.category で関連するCategoryオブジェクトを参照できる（relationship の効果） -->
     {% endif %}
+
     <a href='/task/{{ task.id }}'>詳細</a>
+    
     <form action='/complete/{{ task.id }}' method='POST' style='display:inline'>
         <button>{% if task.is_completed %}未完了{% else %}完了{% endif %}</button>
     </form>
+
     <form action='/delete/{{ task.id }}' method='POST' style='display:inline'>
         <button>削除</button>
     </form>
+
 </div>
 {% else %}
 <p>タスクがありません。上のフォームから追加してください。</p>
