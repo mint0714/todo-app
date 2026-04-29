@@ -61,6 +61,35 @@ def index():
     return render_template('index.html', tasks=tasks, categories=categories)
     # ブラウザに文字を返す
 
+# ── タスクの追加 ──────────────────────────────────────
+@app.route('/add', methods=['POST'])
+def add_task():
+    title = request.form['title']             # フォームからタスク名を取得
+    category_id = request.form.get('category_id') or None
+    # or None：カテゴリ未選択（空文字）のときはNoneにする
+    new_task = Task(title=title, category_id=category_id)
+    db.session.add(new_task)    # DBへの追加を予約
+    db.session.commit()         # 予約した変更をDBに確定（保存）
+    return redirect(url_for('index'))
+
+# ── 完了・未完了の切り替え ────────────────────────────
+@app.route('/complete/<int:task_id>', methods=['POST'])
+def complete_task(task_id):
+    task = Task.query.get_or_404(task_id)  # 存在しないIDなら404エラー
+    task.is_completed = not task.is_completed  # TrueとFalseを反転
+    db.session.commit()
+    return redirect(url_for('index'))
+
+# ── タスクの削除 ──────────────────────────────────────
+@app.route('/delete/<int:task_id>', methods=['POST'])
+def delete_task(task_id):
+    task = Task.query.get_or_404(task_id)
+    db.session.delete(task)
+    # cascade='all, delete-orphan' の設定により紐づくコメントも自動削除される
+    db.session.commit()
+    return redirect(url_for('index'))
+
+
 if __name__ == '__main__':   #「もしこのファイルが直接実行されたならサーバを起動する」という条件。お決まりの文句みたいなもの
     app.run(debug=True)      # デバッグモードでサーバを起動。
 
