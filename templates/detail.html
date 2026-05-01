@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% block title %}{{ task.title }} - ToDoアプリ{% endblock %}
+
+{% block content %}
+<a href='/'>← タスク一覧に戻る</a>
+
+<h1>{{ task.title }}</h1>
+<p>カテゴリ：
+    {% if task.category %}{{ task.category.name }}{% else %}なし{% endif %}
+</p>
+<p>作成日時：{{ task.created_at.strftime('%Y-%m-%d %H:%M') }}</p>
+<p>状態：{% if task.is_completed %}完了済み{% else %}未完了{% endif %}</p>
+
+<hr>
+<h2>コメント</h2>
+
+<!-- コメント追加フォーム -->
+<form action='/task/{{ task.id }}/comment' method='POST'>
+    <input type='text' name='body' placeholder='コメントを入力' required>
+    <button type='submit'>追加</button>
+</form>
+
+<!-- コメント一覧 -->
+<!-- task.comments で紐づくコメントを全件取得（relationshipの効果） -->
+{% for comment in task.comments %}
+<div class='task-item'>
+    <span>{{ comment.body }}</span>
+    <span>{{ comment.created_at.strftime('%m/%d %H:%M') }}</span>
+    <form action='/task/{{ task.id }}/comment/{{ comment.id }}/delete'
+          method='POST' style='display:inline'>
+        <button>削除</button>
+    </form>
+</div>
+{% else %}
+<p>コメントはありません。</p>
+{% endfor %}
+{% endblock %}
