@@ -118,6 +118,35 @@ def delete_category(category_id):
     return redirect(url_for('categories'))
 
 
+# ── タスク詳細 ────────────────────────────────────────
+@app.route('/task/<int:task_id>')
+def task_detail(task_id):
+    task = Task.query.get_or_404(task_id)
+    # task.comments は relationship で自動的に取得される
+    return render_template('detail.html', task=task)
+
+# ── コメントの追加 ────────────────────────────────────
+@app.route('/task/<int:task_id>/comment', methods=['POST'])
+def add_comment(task_id):
+    task = Task.query.get_or_404(task_id)  # タスクの存在確認
+    body = request.form['body']
+    new_comment = Comment(body=body, task_id=task_id)
+    # task_id に紐づけてコメントを保存する（1対多リレーションの実践）
+    db.session.add(new_comment)
+    db.session.commit()
+    return redirect(url_for('task_detail', task_id=task_id))
+
+# ── コメントの削除 ────────────────────────────────────
+@app.route('/task/<int:task_id>/comment/<int:comment_id>/delete',
+           methods=['POST'])
+def delete_comment(task_id, comment_id):
+    comment = Comment.query.get_or_404(comment_id)
+    db.session.delete(comment)
+    db.session.commit()
+    return redirect(url_for('task_detail', task_id=task_id))
+
+
+
 
 if __name__ == '__main__':   #「もしこのファイルが直接実行されたならサーバを起動する」という条件。お決まりの文句みたいなもの
     app.run(debug=True)      # デバッグモードでサーバを起動。
