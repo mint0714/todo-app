@@ -131,7 +131,7 @@ RenderのDeploys画面で、mainマージ後のデプロイ履歴を確認して
 | `pytest tests/e2e` | E2Eテストを実行する |
 | `git add ...` | 変更ファイルをcommit対象にする |
 | `git commit -m "..."` | 変更をcommitする |
-| `git push` | GitHubへ作業ブランチを送る |
+| `git push -u origin chapter13-practice` | 初回pushで作業ブランチをGitHubへ送る |
 
 実行場所: ローカルPCのターミナル、プロジェクトディレクトリ
 
@@ -412,6 +412,9 @@ rollbackは、次のような場面で検討します。
 新しいデータ形式で保存されたデータを古いアプリが読めない場合がある
 Auto Deployが有効なままだと、次のpushで問題の変更が再度デプロイされる場合がある
 ```
+
+Render Dashboardからrollbackする場合、Render側の安全策としてAuto Deployが無効になることがあります。
+その場合は、問題の原因を修正したあとで、Auto Deployを再度有効にするか確認します。
 
 rollbackは「とりあえず押せば安全」ではなく、影響範囲を見て判断する操作です。
 
@@ -866,8 +869,11 @@ git commit -m "Add final practice feature"
 10. 作業ブランチをGitHubへpushします。
 
 ```bash
-git push
+git push -u origin chapter13-practice
 ```
+
+> 補足:
+> すでにupstreamが設定されているbranchでは、2回目以降は `git push` だけでpushできます。
 
 11. GitHubでPull Requestを作成します。
 12. Pull Request本文に、変更内容と確認結果を書きます。
@@ -998,7 +1004,7 @@ git status
 4. GitHub Secretsは主にGitHub Actionsのworkflowで使う秘密情報です。Render環境変数はRender上で動くアプリが実行時に読む設定値です。
 5. APIキー、DB接続URL、パスワードなどが漏れると、外部から不正利用されたり、本番データにアクセスされたりする危険があるためです。
 6. どのcommitがいつデプロイされたか、成功したか失敗したか、buildや起動ログに問題がないかを確認します。
-7. rollbackしてもDB構造やデータが元に戻るとは限りません。また、Auto Deployが有効なままだと、次のpushで問題の変更が再度デプロイされる場合があります。
+7. rollbackしてもDB構造やデータが元に戻るとは限りません。また、rollback後にAuto Deployが無効になっている場合は、原因修正後に再度有効化する必要があります。
 8. アプリが正常に応答できるかを確認するためです。RenderではWeb Serviceの正常性確認やデプロイ時の判断に使われます。
 9. stagingは本番前に確認する環境です。productionは実際の利用者が使う本番環境です。
 10. ローカルでは開発者の環境で動くこと、CIではGitHub上のクリーンな環境で動くこと、CDでは本番環境へ正しく反映されることを確認するためです。
