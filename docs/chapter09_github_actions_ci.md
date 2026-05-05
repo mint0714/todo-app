@@ -127,7 +127,7 @@ git status
 | 第7章の完了 | E2Eテストが `tests/e2e/` にある |
 | 第8章の理解 | traceやartifactが失敗調査に役立つことを説明できる |
 | GitHub | リポジトリがGitHubにpushされている |
-| Git | 作業ブランチを作成してpushできる |
+| Git | `chapter09-practice` などの作業ブランチを作成してpushできる |
 | GitHub Actions | GitHubリポジトリのActionsタブを開ける |
 | 依存関係 | `requirements.txt` と `requirements-dev.txt` の役割を説明できる |
 
@@ -297,6 +297,11 @@ python -m playwright install --with-deps chromium
 ```
 
 この教材では、pytest-playwrightの標準に合わせて、まずChromiumでE2Eテストを実行します。
+
+> 補足:
+> この章のCIでは、GitHub Actionsのrunner上でFlaskアプリを起動し、その環境内でSQLite DBが作られます。
+> runnerは実行ごとに新しく用意されるため、ローカルPCのDBや本番DBとは分かれています。
+> ただし、これは本格的なテスト用DB設計の代わりではありません。テストが増えたら、第5章で整理したように、テスト用DBの初期化方針を明確にします。
 
 ## 5-8. artifact
 
@@ -702,6 +707,14 @@ git commit -m "Add CI workflow"
 ```
 
 3. 作業ブランチをGitHubへpushします。
+
+初めてこのbranchをpushする場合:
+
+```bash
+git push -u origin chapter09-practice
+```
+
+すでにupstreamが設定されている場合:
 
 ```bash
 git push
