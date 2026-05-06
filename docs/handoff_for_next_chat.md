@@ -1,23 +1,26 @@
 # 教材作成 引継ぎ資料
 
-この資料は、新しいチャットでFlask ToDoアプリ教材の作成を再開するための引継ぎメモです。
+この資料は、新しいチャットでFlask ToDoアプリ教材の作業を再開するための引継ぎメモです。
+
+最終更新時点の状況:
+
+```text
+作業ディレクトリ: /home/matsu/todo-app
+確認時点のブランチ: main
+教材の正本: docs/chapterXX_*.md
+DOCX生成: まだ行っていない
+```
 
 ## 1. プロジェクト概要
 
-作業ディレクトリ:
-
-```text
-/home/matsu/todo-app
-```
-
-題材にするアプリ:
+題材にしているアプリ:
 
 - Flask製ToDoアプリ
 - SQLite + SQLAlchemyを使用
 - タスク、カテゴリ、コメント機能がある
-- 将来的にPython版PlaywrightでE2Eテストを追加する
-- GitHub ActionsでCIを構築する
-- RenderでCDとデプロイを扱う
+- Python版PlaywrightでE2Eテストを学ぶ
+- GitHub ActionsでCIを学ぶ
+- Renderでデプロイ、DB運用、CDを学ぶ
 
 主なファイル:
 
@@ -51,75 +54,95 @@ chapterXX_xxx.md
   -> 正本。レビュー・修正・差分確認用。
 
 chapterXX_xxx.docx
-  -> 学習者向け配布版。
+  -> 学習者向け配布版。まだ生成していない。
 ```
 
-最初からDOCXを生成しない。
+## 3. 必ず参照するファイル
 
-## 3. 既存の教材関連ファイル
+新しいチャットでは、まず次の3ファイルを読む。
 
 ```text
 docs/material_reference.md
 docs/curriculum_plan.md
-docs/chapter0_environment_and_prerequisites.docx
 docs/handoff_for_next_chat.md
-```
-
-### `docs/material_reference.md`
-
-教材作成の書き方の基準。
-
-主な内容:
-
-- 章共通テンプレート
-- 表紙、目次、見出しルール
-- ハンズオンの標準構成
-- コマンド表記ルール
-- スクリーンショット枠
-- 動作確認の標準
-- 理解チェックと回答例
-- 章末の締め方
-
-### `docs/curriculum_plan.md`
-
-教材内容の計画書。
-
-主な内容:
-
-- 教材全体の目的
-- 想定読者
-- 扱う技術
-- 扱わないこと
-- 第0章〜第13章の計画
-- 各章の到達目標、主な内容、ハンズオン、作成・変更ファイル、次章への接続
-- 最終課題
-
-### `docs/chapter0_environment_and_prerequisites.docx`
-
-初期に試作した第0章DOCX。
-
-今後はこのDOCXを正本にしない。必要なら参考程度に見る。
-
-## 4. 教材作成時に必ず参照するファイル
-
-新しいチャットでは、まず次の2ファイルを読む。
-
-```text
-docs/material_reference.md
-docs/curriculum_plan.md
 ```
 
 役割:
 
 ```text
 material_reference.md
-  -> どう書くか。
+  -> どう書くか。章構成、ハンズオン形式、表記ルール。
 
 curriculum_plan.md
-  -> 何を書くか。
+  -> 何を書くか。章ごとの目的、到達目標、ハンズオン計画。
+
+handoff_for_next_chat.md
+  -> 現在の作業状況と次にやること。
 ```
 
-## 5. 教材シリーズの章立て
+## 4. 現在の教材ファイル
+
+Markdown正本は第0章から第13章まで作成済み。
+
+```text
+docs/chapter00_environment_and_prerequisites.md
+docs/chapter01_web_application_basics.md
+docs/chapter02_flask_application_structure.md
+docs/chapter03_database_basics.md
+docs/chapter04_testing_concepts.md
+docs/chapter05_testable_flask_design.md
+docs/chapter06_playwright_setup.md
+docs/chapter07_e2e_testing_todo_app.md
+docs/chapter08_debugging_failed_tests.md
+docs/chapter09_github_actions_ci.md
+docs/chapter10_render_deployment.md
+docs/chapter11_render_database_operations.md
+docs/chapter12_cd_with_render.md
+docs/chapter13_practical_operations.md
+```
+
+補助資料:
+
+```text
+docs/material_reference.md
+docs/curriculum_plan.md
+docs/handoff_for_next_chat.md
+```
+
+旧DOCX:
+
+```text
+docs/chapter0_environment_and_prerequisites.docx
+```
+
+旧DOCXは正本として扱わない。必要なら参考程度に見る。
+
+## 5. 完了済みの作業
+
+完了済み:
+
+- 第0章から第13章までのMarkdown正本を作成
+- `docs/material_reference.md` を教材作成基準として整備
+- `docs/curriculum_plan.md` を章計画として整備
+- 全章をレビューし、構成と章間接続を補強
+- 第0章のハンズオン形式を他章と同じ標準構成に統一
+- DOCXは未生成
+- アプリ本体の実装ファイルは教材作成では編集していない
+
+直近のレビュー修正で補強した主な点:
+
+- 第5章、第6章、第7章のつながりを明確化
+  - 第5章は「テストしやすい設計方針」を学ぶ章
+  - 第6章、第7章は「現行アプリ構成のままPlaywrightを導入する」章
+  - 一意なテストデータ名は、テスト用DB初期化の代替ではなく暫定策だと補足
+- 第9章に、CI runner上のSQLiteがローカルDBや本番DBと分かれることを補足
+- 第11章に、第5章とのDB分離の視点の違いを補足
+  - 第5章: テスト安定化のためのDB分離
+  - 第11章: 本番データ運用のためのDB分離
+- 第13章に、Render rollback後のAuto Deploy確認を補足
+- 第0章のスクリーンショット枠に撮影タイミングを追加
+
+## 6. 教材シリーズの章立て
 
 ```text
 第0章: 開発環境と前提知識
@@ -138,71 +161,22 @@ curriculum_plan.md
 第13章: 実務的な運用
 ```
 
-## 6. 次にやること
-
-次に作成するファイル:
+流れ:
 
 ```text
-docs/chapter00_environment_and_prerequisites.md
+第0〜3章
+  -> Webアプリ、Flask、DBの土台を理解する
+
+第4〜8章
+  -> テスト観点、Playwright、E2Eテスト、失敗調査を学ぶ
+
+第9〜13章
+  -> GitHub Actions、Render、DB運用、CD、実務運用を学ぶ
 ```
 
-目的:
+## 7. 重要な内容整理
 
-第0章のMarkdown正本を作成する。
-
-注意:
-
-- まずMarkdownだけ作る
-- DOCXはまだ生成しない
-- 旧DOCXは正本として扱わない
-- アプリ本体は編集しない
-
-## 7. 第0章で扱う内容
-
-第0章タイトル:
-
-```text
-第0章: 開発環境と前提知識
-```
-
-扱う内容:
-
-- 開発環境と前提知識
-- Python / pip / venv
-- `requirements.txt`
-- Flaskアプリのローカル起動
-- ブラウザでの手動動作確認
-- Git / GitHubの基本
-- branch / commit / push / pull request
-- `.gitignore`
-- 次章への接続
-
-到達目標:
-
-- Pythonとpipの役割を説明できる
-- 仮想環境を有効化できる
-- `requirements.txt` から依存関係をインストールできる
-- Flaskアプリをローカルで起動できる
-- `git status` で作業状態を確認できる
-- branch、commit、push、pull requestの関係を説明できる
-
-## 8. 第0章の想定ハンズオン
-
-| 番号 | 内容 | 実行場所 |
-| --- | --- | --- |
-| 0-1 | プロジェクトディレクトリを確認する | ローカルPC |
-| 0-2 | Pythonとpipを確認する | ローカルPC |
-| 0-3 | 仮想環境を有効化する | ローカルPC |
-| 0-4 | 依存関係をインストールする | ローカルPC |
-| 0-5 | Flaskアプリを起動する | ローカルPC |
-| 0-6 | ToDoアプリを手動操作する | ブラウザ |
-| 0-7 | Gitの状態を確認する | ローカルPC |
-| 0-8 | 作業ブランチを作る | ローカルPC |
-| 0-9 | GitHubへpushする流れを確認する | ローカルPC / GitHub画面 |
-
-## 9. データベースに関する認識
-
-教材では、DBを目的ごとに分けて考える。
+DBに関する整理:
 
 ```text
 開発用DB
@@ -217,14 +191,19 @@ docs/chapter00_environment_and_prerequisites.md
 
 現在のアプリはSQLiteを使っている。
 
-教材の流れ:
+教材上の扱い:
 
 - 第0〜3章: 今あるSQLiteの仕組みを理解する
 - 第5章: テスト用DBを分ける考え方を学ぶ
-- 第6〜8章: E2Eテストではテスト用SQLite DBを使う
-- 第10〜12章: Render本番ではSQLiteではなくPostgreSQLを使う方針を学ぶ
+- 第6〜7章: まず現行アプリ構成のままE2Eテストを書く
+- 第7章: DB初期化の代わりに一意なテストデータ名で衝突を避ける
+- 第9章: GitHub Actions runner上でE2Eテストを実行する
+- 第10章: Renderへ初回デプロイする
+- 第11章: 本番DB運用としてSQLiteとPostgreSQL、`DATABASE_URL`、migrationを整理する
+- 第12章: CI成功後にRenderへ反映するCDを扱う
+- 第13章: branch protection、required checks、Secrets、rollback、最終課題を扱う
 
-## 10. リファレンス上の重要ルール
+## 8. リファレンス上の重要ルール
 
 `docs/material_reference.md` に従う。
 
@@ -232,15 +211,41 @@ docs/chapter00_environment_and_prerequisites.md
 
 - 章末にエラー集の専用セクションは入れない
 - 各章は共通テンプレートに沿う
-- 各ハンズオンには目的、実行場所、手順、期待される結果、確認ポイントを入れる
+- 各ハンズオンには、目的、実行場所、変更するファイル、手順の種類、作業前の状態、手順、期待される結果、作業後の状態、確認ポイントを入れる
+- ファイルを編集しない場合も `変更するファイル: なし` と明記する
 - コマンドは本文に埋め込まずコードブロックにする
+- OS差があるコマンドはLinux / macOSとWindows PowerShellを分ける
+- スクリーンショット枠には撮影タイミングを書く
 - 理解チェックと回答例を入れる
 - 章末に次章への接続を入れる
 - 教材作成だけの依頼ではアプリ本体を編集しない
 
-## 11. 新しいチャットへの依頼文例
+## 9. 次にやること
 
-新しいチャットでは、次のように依頼する。
+次チャットでおすすめの作業:
+
+1. `docs/material_reference.md`、`docs/curriculum_plan.md`、この引継ぎ資料を読む
+2. `git status --short` で作業状態を確認する
+3. 第0章から第13章まで、必要なら最終レビューを行う
+4. 問題なければ、MarkdownからDOCXを生成する作業に進む
+
+まだ行っていないこと:
+
+- DOCX生成
+- 1つの統合Markdownへの結合
+- 目次やページ番号など、DOCX向けの体裁調整
+- 実際のGitHub Actions workflowファイル作成
+- 実際のRender設定作成
+
+注意:
+
+- 第9章以降の `.github/workflows/ci.yml`、Render設定、Render Postgresなどは、教材本文内のハンズオン手順として説明している。
+- 教材作成作業として、実ファイルの `.github/workflows/ci.yml` や `render.yaml` を作成したわけではない。
+- 最終課題を実施する場合のみ、学習者が選んだ機能に応じて `app.py`、`templates/`、`tests/e2e/` などを編集する。
+
+## 10. 次チャットへの依頼文例
+
+次チャットでは、たとえば次のように依頼する。
 
 ```text
 このプロジェクトでは、Flask製ToDoアプリを題材に、Webアプリ開発・テスト自動化・CI/CDを学ぶ教材を作成しています。
@@ -251,16 +256,17 @@ docs/chapter00_environment_and_prerequisites.md
 - docs/curriculum_plan.md
 - docs/handoff_for_next_chat.md
 
-そのうえで、第0章のMarkdown正本を作成してください。
+現在、第0章から第13章までのMarkdown正本は作成済みです。
 
-作成するファイル:
-docs/chapter00_environment_and_prerequisites.md
+次に、DOCX化に進む前の最終確認をしてください。
+
+重視する観点:
+- 章間の流れが自然か
+- ハンズオン形式がそろっているか
+- DOCX変換時に崩れそうなMarkdown表記がないか
+- アプリ本体のファイルに不要な変更がないか
 
 注意:
-- まずMarkdownだけ作成してください
-- DOCXはまだ生成しないでください
-- アプリ本体のファイルは編集しないでください
-- docs/material_reference.md の基準に従ってください
-- docs/curriculum_plan.md の第0章計画に沿ってください
+- まだDOCXは生成しないでください
+- まず確認結果だけ提示してください
 ```
-
