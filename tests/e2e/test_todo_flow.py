@@ -52,7 +52,7 @@ def test_add_task_to_category(page:Page):
 
  #タスク詳細ページ遷移テスト
 def test_open_task_detail_page(page:Page):
-    task_title = unique_name("E2E詳細遷移タスク")
+    task_title = unique_name("E2E詳細遷移テスト")
     
     page.goto(BASE_URL)
     page.get_by_placeholder("タスクを入力").fill(task_title)
@@ -61,4 +61,20 @@ def test_open_task_detail_page(page:Page):
     task_row.get_by_role("link", name="詳細").click()
     expect(page.get_by_role("heading", name=task_title)).to_be_visible()
     expect(page.get_by_text("状態：未完了")).to_be_visible()
-    page.wait_for_timeout(1000)
+
+ #コメント追加テスト
+def test_add_comment_to_task(page:Page):
+    task_title = unique_name("E2Eコメント追加テスト")
+    comment_content = unique_name("E2Eコメント追加")
+    
+    page.goto(BASE_URL)
+    page.get_by_placeholder("タスクを入力").fill(task_title)
+    page.get_by_role("button", name="追加").click()
+    task_row = page.locator(".task-item").filter(has_text=task_title)
+    task_row.get_by_role("link", name="詳細").click()
+    page.get_by_placeholder("コメントを入力").fill(comment_content)
+    page.get_by_role("button", name="追加").click()
+    comment_row = page.locator(".task-item").filter(has_text=comment_content)
+    expect(comment_row).to_be_visible()
+
+ #expect(page.get_by_text(comment_content)).to_be_visible()
