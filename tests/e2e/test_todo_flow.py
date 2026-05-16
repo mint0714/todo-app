@@ -92,3 +92,16 @@ def test_toggle_task_complete(page: Page):
 
     expect(task_row.get_by_role("button", name="未完了", exact=True)).to_be_visible()
     expect(task_row).to_have_class(re.compile(r"\bcompleted\b"))
+
+def test_delete_task(page: Page):
+    task_title = unique_name("E2E削除タスク")
+ 
+    page.goto(BASE_URL)
+    page.get_by_placeholder("タスクを入力").fill(task_title)
+    page.get_by_role("button", name="追加").click()
+    expect(page.get_by_text(task_title)).to_be_visible()
+ 
+    task_row = page.locator(".task-item").filter(has_text=task_title)
+    task_row.get_by_role("button", name="削除").click()
+ 
+    expect(task_row).not_to_be_visible()
