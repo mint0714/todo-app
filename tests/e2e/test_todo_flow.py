@@ -1,3 +1,4 @@
+import re
 from uuid import uuid4
  
 from playwright.sync_api import Page, expect
@@ -77,4 +78,17 @@ def test_add_comment_to_task(page:Page):
     comment_row = page.locator(".task-item").filter(has_text=comment_content)
     expect(comment_row).to_be_visible()
 
- #expect(page.get_by_text(comment_content)).to_be_visible()
+def test_toggle_task_complete(page: Page):
+    task_title = unique_name("E2E完了切替テスト")
+
+    page.goto(BASE_URL)
+    page.get_by_placeholder("タスクを入力").fill(task_title)
+    page.get_by_role("button", name="追加").click()
+
+    task_row = page.locator(".task-item").filter(has_text=task_title)
+    expect(task_row.get_by_role("button", name="完了", exact=True)).to_be_visible()
+
+    task_row.get_by_role("button", name="完了", exact=True).click()
+
+    expect(task_row.get_by_role("button", name="未完了", exact=True)).to_be_visible()
+    expect(task_row).to_have_class(re.compile(r"\bcompleted\b"))
