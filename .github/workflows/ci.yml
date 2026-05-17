@@ -42,6 +42,14 @@ jobs:
             --screenshot only-on-failure \
             --video retain-on-failure \
             --output test-results
+            
+      - name: Upload Playwright artifacts
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v5
+        with: 
+          name: playwright-artifacts
+          path: test-results/
+          if-no-files-found: ignore
 
 
 
