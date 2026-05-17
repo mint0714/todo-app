@@ -1,11 +1,11 @@
 name: CI
  
- on: 
+on: 
   pull_request: 
     branches: [ main ]
   push: 
     branches: [ main ]
-  workflow_dispatch: \
+  workflow_dispatch:
 
 jobs: 
   e2e-tests: 
@@ -42,5 +42,6 @@ jobs:
             --screenshot only-on-failure \
             --video retain-on-failure \
             --output test-results
+
 
 
