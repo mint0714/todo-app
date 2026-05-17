@@ -78,6 +78,7 @@ def test_add_comment_to_task(page:Page):
     comment_row = page.locator(".task-item").filter(has_text=comment_content)
     expect(comment_row).to_be_visible()
 
+#タスク完了テスト
 def test_toggle_task_complete(page: Page):
     task_title = unique_name("E2E完了切替テスト")
 
@@ -93,6 +94,7 @@ def test_toggle_task_complete(page: Page):
     expect(task_row.get_by_role("button", name="未完了", exact=True)).to_be_visible()
     expect(task_row).to_have_class(re.compile(r"\bcompleted\b"))
 
+#タスク削除テスト
 def test_delete_task(page: Page):
     task_title = unique_name("E2E削除タスク")
  
