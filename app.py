@@ -1,17 +1,28 @@
-from flask import Flask, render_template, request, redirect, url_for # FlaskというWebサーバの機能セットを読み込む
-                                                                     # （DB設定・モデル定義は Step 2 のものをそのまま使う）
-from flask_sqlalchemy import SQLAlchemy  # DBを操作するライブラリ
+import os
+
 from datetime import datetime
+from dotenv import load_dotenv
+from flask import Flask, render_template, request, redirect, url_for
+from flask_migrate import Migrate
+from flask_sqlalchemy import SQLAlchemy
+
+load_dotenv()
 
 app = Flask(__name__)       #Flaskクラスの中にはWebアプリを動かすために必要な機能が全て定義されています。しかしクラスは設計図なので、そのままでは使えません。
                             #Flaskのインスタンスを作成し、URLのルーティング処理や、サーバの起動、DBの設定などを可能にします.(app.py)
 
-
-
 # ── データベースの設定 ──────────────────────────────────
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db' #SQLAlchemyがDBファイルを読み書きするときに使うファイルのパスを保存。
+database_url = os.environ.get("DATABASE_URL", "sqlite:///todo.db")
 
-db = SQLAlchemy(app)  # SQLAlchemyのインスタンスを作成する。これを通じてDBを操作する
+if database_url.startswith("postgres://"):
+    database_url = database_url.replace("postgres://", "postgresql://", 1)
+
+app.config["SQLALCHEMY_DATABASE_URI"] = database_url
+app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+db = SQLAlchemy(app) # SQLAlchemyのインスタンスを作成する。これを通じてDBを操作する
+migrate = Migrate(app, db) 
+
+
 
 # ── テーブル定義：categories ────────────────────────────
 class Category(db.Model):
@@ -39,11 +50,6 @@ class Comment(db.Model):
     body       = db.Column(db.Text, nullable=False)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
     task_id    = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=False)  # ForeignKey：tasksテーブルのidと紐づく外部キー
-
-# ── DBにテーブルを作成する ──────────────────────────────
-with app.app_context():  #後処理を手動で書く必要がなくなる
-    db.create_all()  # 上記クラスの定義を元にDBファイルを作成する。これは現在存在しないテーブルだけを作成します。
-
 
 
 @app.route('/')
